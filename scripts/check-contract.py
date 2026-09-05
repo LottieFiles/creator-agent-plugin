@@ -20,11 +20,11 @@ from check_common import (
 )
 
 
-CONTRACT = ROOT / "contract" / "engine-mcp-tools.json"
-DIGEST = ROOT / "contract" / "engine-mcp-tools.sha256"
+CONTRACT = ROOT / "contracts" / "public-mcp-v1.json"
+DIGEST = ROOT / "contracts" / "public-mcp-v1.sha256"
 TOOL_TOKEN = re.compile(r"\b(?:engine_[a-z0-9_]+|request_upload|lf_graphql)\b")
 DIGEST_LINE = re.compile(
-    r"^([a-f0-9]{64})(?:\s+(?:\*?engine-mcp-tools\.json|contracts/public-mcp-v1\.json))?\s*$"
+    r"^([a-f0-9]{64})(?:\s+contracts/public-mcp-v1\.json)?\s*$"
 )
 EXPECTED_TOOLS = {
     "engine_cancel_job",
@@ -56,18 +56,18 @@ def adapt_tools(payload: Any) -> list[Any]:
 def check_digest() -> None:
     if not CONTRACT.is_file():
         raise CheckError(
-            "missing contract/engine-mcp-tools.json; add the reviewed public tools/list snapshot before running distribution checks"
+            "missing contracts/public-mcp-v1.json; add the reviewed public tools/list snapshot before running distribution checks"
         )
     if not DIGEST.is_file():
         raise CheckError(
-            "missing contract/engine-mcp-tools.sha256; add the SHA-256 digest for the public tools/list snapshot"
+            "missing contracts/public-mcp-v1.sha256; add the SHA-256 digest for the public tools/list snapshot"
         )
     lines = [line for line in DIGEST.read_text(encoding="utf-8").splitlines() if line.strip()]
     if len(lines) != 1:
         raise CheckError("contract digest must contain exactly one SHA-256 line")
     match = DIGEST_LINE.fullmatch(lines[0])
     if not match:
-        raise CheckError("contract digest must be a lowercase SHA-256 for the reviewed public snapshot")
+        raise CheckError("contract digest must be the reviewed public snapshot SHA-256 and source label")
     actual = sha256(CONTRACT)
     if match.group(1) != actual:
         raise CheckError(f"contract digest mismatch: expected {match.group(1)}, got {actual}")
@@ -128,6 +128,22 @@ def main() -> None:
     if server.get("name") != "creator-mcp":
         raise CheckError("contract.server.name must be creator-mcp")
     require_text(server.get("version"), "contract.server.version")
+    protocol_versions = require_array(root.get("protocolVersions"), "contract.protocolVersions")
+    if not protocol_versions or any(not isinstance(version, str) or not version for version in protocol_versions):
+        raise CheckError("contract.protocolVersions must be a non-empty string array")
+    if len(protocol_versions) != len(set(protocol_versions)):
+        raise CheckError("contract.protocolVersions must not contain duplicates")
+    transport = require_object(root.get("transport"), "contract.transport")
+    if transport.get("type") != "streamable-http" or transport.get("path") != "/mcp":
+        raise CheckError("contract.transport must use streamable-http at /mcp")
+    catalog = require_object(load_json(ROOT / "catalog" / "plugin.json"), "catalog/plugin.json")
+    remote = require_object(catalog.get("remote"), "catalog.remote")
+    production_url = require_text(remote.get("productionUrl"), "catalog.remote.productionUrl")
+    if transport.get("productionResourceUri") != production_url:
+        raise CheckError("contract.transport.productionResourceUri must equal catalog.remote.productionUrl")
+    for key, value in transport.items():
+        if "staging" in key.lower() or (isinstance(value, str) and "staging" in value.lower()):
+            raise CheckError("contract.transport must not contain staging data")
     tools = adapt_tools(payload)
     if not tools:
         raise CheckError("contract must contain at least one tool")

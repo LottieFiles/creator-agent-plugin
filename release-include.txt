@@ -5,7 +5,7 @@ CHANGELOG.md
 SECURITY.md
 SUPPORT.md
 catalog
-contract
+contracts
 content
 docs
 examples

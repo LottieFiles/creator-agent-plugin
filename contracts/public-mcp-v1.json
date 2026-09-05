@@ -1,0 +1,1157 @@
+{
+  "authorization": {
+    "scopes": [
+      "mcp:full"
+    ],
+    "type": "oauth2"
+  },
+  "protocolVersions": [
+    "2026-07-28",
+    "2025-11-25",
+    "2025-06-18",
+    "2025-03-26"
+  ],
+  "schemaVersion": "1.0.0",
+  "server": {
+    "name": "creator-mcp",
+    "version": "0.1.0"
+  },
+  "tools": [
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "mcp:full"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": false,
+        "title": "Cancel render job"
+      },
+      "description": "Cancel a queued or running render job (idempotent).",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "jobId"
+        ],
+        "type": "object"
+      },
+      "name": "engine_cancel_job",
+      "outputSchema": {
+        "anyOf": [
+          {
+            "additionalProperties": false,
+            "properties": {
+              "jobId": {
+                "type": "string"
+              },
+              "ok": {
+                "const": true
+              },
+              "state": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "jobId",
+              "state"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": true,
+            "properties": {
+              "error": {
+                "additionalProperties": false,
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "code",
+                  "message",
+                  "retryable"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ],
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "mcp:full"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Cancel render job"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "mcp:full"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": true,
+        "title": "Engine writing docs"
+      },
+      "description": "Engine writing docs. Call **at most once** per task. For any animated/non-trivial scene use topic \"patterns\" once, then write **one** engine_exec that names a rig, keyframes Position on that group, and returns renderFilmstrip — do not fetch a second topic (guide, api, overview) unless that exec returned an error. Short topics: overview (default) | shapes | animation | paints | render. Full files: guide, api. Never pass topic \"all\".\n",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "properties": {
+          "topic": {
+            "default": null,
+            "description": "patterns | guide | api | overview (default) | shapes | animation | paints | render.",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "name": "engine_docs",
+      "outputSchema": {
+        "anyOf": [
+          {
+            "additionalProperties": false,
+            "properties": {
+              "bytes": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "topic": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "topic",
+              "bytes"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": true,
+            "properties": {
+              "error": {
+                "additionalProperties": false,
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "code",
+                  "message",
+                  "retryable"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ],
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "mcp:full"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Engine writing docs"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "mcp:full"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false,
+        "readOnlyHint": false,
+        "title": "Manage Engine documents"
+      },
+      "description": "List, reset, or delete durable Engine documents. Reset and delete require elicitation confirmation.",
+      "inputSchema": {
+        "$defs": {
+          "DocumentAction": {
+            "enum": [
+              "list",
+              "reset",
+              "delete"
+            ],
+            "type": "string"
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "properties": {
+          "action": {
+            "$ref": "#/$defs/DocumentAction"
+          },
+          "engineId": {
+            "default": null,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "type": "object"
+      },
+      "name": "engine_document",
+      "outputSchema": {
+        "anyOf": [
+          {
+            "anyOf": [
+              {
+                "properties": {
+                  "documents": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "engineId": {
+                          "type": "string"
+                        },
+                        "revision": {
+                          "type": "string"
+                        },
+                        "tombstone": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "engineId",
+                        "revision",
+                        "tombstone"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "documents"
+                ]
+              },
+              {
+                "properties": {
+                  "action": {
+                    "enum": [
+                      "reset",
+                      "delete"
+                    ]
+                  },
+                  "durability": {
+                    "type": "string"
+                  },
+                  "engineId": {
+                    "type": "string"
+                  },
+                  "ok": {
+                    "const": true
+                  },
+                  "revision": {
+                    "type": "string"
+                  },
+                  "tombstone": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "ok",
+                  "action",
+                  "engineId",
+                  "revision",
+                  "tombstone",
+                  "durability"
+                ]
+              },
+              {
+                "properties": {
+                  "action": {
+                    "enum": [
+                      "reset",
+                      "delete"
+                    ]
+                  },
+                  "cancelled": {
+                    "const": true
+                  },
+                  "engineId": {
+                    "type": "string"
+                  },
+                  "ok": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "ok",
+                  "action",
+                  "engineId",
+                  "cancelled"
+                ]
+              }
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": true,
+            "properties": {
+              "error": {
+                "additionalProperties": false,
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "code",
+                  "message",
+                  "retryable"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ],
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "mcp:full"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Manage Engine documents"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "mcp:full"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false,
+        "readOnlyHint": false,
+        "title": "Run Engine JavaScript"
+      },
+      "description": "Run JavaScript against a persistent Engine instance (code mode).\nNative Engine host API (entity ids are bigint). In-scope globals: engine, PropertyType, params, ctx, dump, files. Do not import.\nNot DOM, Lottie, Canvas, or After Effects: do not call createComposition, engine.root, engine.composition, addRect, createRect, or setEntityName.\nNever reset or delete with engine_document unless the user asks to start over or wipe the scene.\nSignatures (positional; insert x,y is the shape center; fill colors {red,green,blue,alpha} floats 0–1):\n  engine.createComp(width, height, fps, startSec, endSec) -> bigint\n  engine.insertRect/insertEllipse(comp, x, y, w, h, fill) -> bigint\n  engine.createGroup(comp, x, y); engine.setParent(child, group); engine.setName(node, name)\n  const tr = engine.insertTrack(node, PropertyType.Position, t); const kf = engine.addKeyFrame(node, PropertyType.Position, tr, t); engine.setKeyFrameVec2(kf, {x,y})\n  engine.setBackgroundColor(r,g,b,a) // 0–255 ints, not a color object\n  engine.describe() -> [{id, parent, kind, name, data, bbox}] for the focused comp; engine.getNodeData(node) / engine.setNodeData(node, text) is a free-text description of what a node represents\nEditing an existing document: call engine.describe() first, pick the node whose name/data/bbox matches what the user means, then mutate that node in place (setStaticVec2, insertTrack, setStaticSrgbColor on its paint, ...). Never createComp or rebuild the scene for an edit.\nAnimated scene: name the rig, keyframe PropertyType.Position on that named group, return engine.renderFilmstrip({tiles:8}) in the SAME engine_exec. Prefer one complete script. Do not start with engine.methods(). For a non-trivial scene call engine_docs topic \"patterns\" once, then write.\nExample (adapt numbers/names; this is not the task):\nconst c = engine.createComp(256, 256, 30, 0, 2);\nconst rig = engine.createGroup(c, 0, 0);\nengine.setName(rig, \"sample\");\nconst n = engine.insertRect(c, 128, 128, 80, 80, { red: 0.9, green: 0.2, blue: 0.2, alpha: 1 });\nengine.setParent(n, rig);\nconst tr = engine.insertTrack(rig, PropertyType.Position, 0);\nengine.setKeyFrameVec2(engine.addKeyFrame(rig, PropertyType.Position, tr, 0), { x: 0, y: 40 });\nengine.setKeyFrameVec2(engine.addKeyFrame(rig, PropertyType.Position, tr, 2), { x: 0, y: -40 });\nreturn engine.renderFilmstrip({tiles:8});",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "properties": {
+          "code": {
+            "description": "JavaScript source. Globals engine, PropertyType, params, ctx, dump, files are already in scope.\nUse createComp, insertRect/insertEllipse (center x,y), createGroup/setParent, insertTrack+addKeyFrame+setKeyFrameVec2.\nColors {red,green,blue,alpha} 0–1. setBackgroundColor(r,g,b,a) is 0–255 ints. Preview with return engine.renderFilmstrip({tiles:8}).",
+            "type": "string"
+          },
+          "engineId": {
+            "default": null,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "params": {
+            "default": null
+          },
+          "timeoutMs": {
+            "default": null,
+            "description": "Wall-clock budget in milliseconds (default 5000, max 30000).",
+            "format": "uint64",
+            "minimum": 0,
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "type": "object"
+      },
+      "name": "engine_exec",
+      "outputSchema": {
+        "anyOf": [
+          {
+            "additionalProperties": false,
+            "properties": {
+              "durability": {
+                "type": "string"
+              },
+              "engineId": {
+                "type": "string"
+              },
+              "logs": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "result": {},
+              "revision": {
+                "type": "string"
+              },
+              "warnings": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "result",
+              "logs",
+              "engineId",
+              "revision",
+              "durability"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": true,
+            "properties": {
+              "error": {
+                "additionalProperties": false,
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "code",
+                  "message",
+                  "retryable"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ],
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "mcp:full"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Run Engine JavaScript"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "mcp:full"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false,
+        "readOnlyHint": false,
+        "title": "Export Engine"
+      },
+      "description": "Async png/filmstrip/mp4/webm export of the current Engine. Prefer return engine.renderFilmstrip({tiles:8}) inside engine_exec for previews. 2026 task clients get a task handle and poll tasks/get; others get { jobId } and poll engine_job_status / engine_job_result.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "properties": {
+          "durationSec": {
+            "default": null,
+            "format": "float",
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "engineId": {
+            "default": null,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "format": {
+            "default": null,
+            "description": "png (default), filmstrip, mp4, or webm.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fps": {
+            "default": null,
+            "format": "float",
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "frameTimeSec": {
+            "default": null,
+            "format": "float",
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "height": {
+            "default": null,
+            "format": "uint32",
+            "minimum": 0,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "tiles": {
+            "default": null,
+            "format": "uint32",
+            "minimum": 0,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "width": {
+            "default": null,
+            "format": "uint32",
+            "minimum": 0,
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "name": "engine_export",
+      "outputSchema": {
+        "anyOf": [
+          {
+            "additionalProperties": false,
+            "properties": {
+              "jobId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "jobId"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": true,
+            "properties": {
+              "error": {
+                "additionalProperties": false,
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "code",
+                  "message",
+                  "retryable"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ],
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "mcp:full"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Export Engine"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "mcp:full"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": true,
+        "title": "Get render job result"
+      },
+      "description": "Fetch a finished render job. Stills may include an inline PNG; video is a resource_link.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "jobId"
+        ],
+        "type": "object"
+      },
+      "name": "engine_job_result",
+      "outputSchema": {
+        "anyOf": [
+          {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "artifact": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "bytes": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "filename": {
+                        "type": "string"
+                      },
+                      "height": {},
+                      "mime": {
+                        "type": "string"
+                      },
+                      "uri": {
+                        "type": "string"
+                      },
+                      "width": {}
+                    },
+                    "required": [
+                      "uri",
+                      "filename",
+                      "mime",
+                      "bytes",
+                      "width",
+                      "height"
+                    ],
+                    "type": "object"
+                  },
+                  "inlineBytes": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "jobId": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "const": "succeeded"
+                  }
+                },
+                "required": [
+                  "jobId",
+                  "state",
+                  "artifact"
+                ]
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "artifact": {},
+                  "engineId": {
+                    "type": "string"
+                  },
+                  "error": {},
+                  "jobId": {
+                    "type": "string"
+                  },
+                  "logs": {
+                    "type": "array"
+                  },
+                  "progress": {},
+                  "state": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "jobId",
+                  "engineId",
+                  "state",
+                  "progress",
+                  "logs",
+                  "error",
+                  "artifact"
+                ]
+              }
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": true,
+            "properties": {
+              "error": {
+                "additionalProperties": false,
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "code",
+                  "message",
+                  "retryable"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ],
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "mcp:full"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Get render job result"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "mcp:full"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": true,
+        "title": "Get render job status"
+      },
+      "description": "Poll an async render job started by engine.renderJob or engine_export.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "jobId"
+        ],
+        "type": "object"
+      },
+      "name": "engine_job_status",
+      "outputSchema": {
+        "anyOf": [
+          {
+            "additionalProperties": false,
+            "properties": {
+              "artifact": {},
+              "engineId": {
+                "type": "string"
+              },
+              "error": {},
+              "jobId": {
+                "type": "string"
+              },
+              "logs": {
+                "type": "array"
+              },
+              "progress": {},
+              "state": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "jobId",
+              "engineId",
+              "state",
+              "progress",
+              "logs",
+              "error",
+              "artifact"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": true,
+            "properties": {
+              "error": {
+                "additionalProperties": false,
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "code",
+                  "message",
+                  "retryable"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ],
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "mcp:full"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Get render job status"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "mcp:full"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true,
+        "readOnlyHint": false,
+        "title": "LottieFiles GraphQL"
+      },
+      "description": "Run a GraphQL operation with the caller's delegated LottieFiles grant. This raw adapter returns GraphQL JSON or URLs. Load bytes into document files or assets before engine.load.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "properties": {
+          "operationName": {
+            "default": null,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "query": {
+            "type": "string"
+          },
+          "variables": {
+            "default": null
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "name": "lf_graphql",
+      "outputSchema": {
+        "anyOf": [
+          {
+            "additionalProperties": true,
+            "description": "The upstream GraphQL response object. Data and errors are preserved.",
+            "properties": {
+              "data": {},
+              "errors": {
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          {
+            "additionalProperties": true,
+            "properties": {
+              "error": {
+                "additionalProperties": false,
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "code",
+                  "message",
+                  "retryable"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ],
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "mcp:full"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "LottieFiles GraphQL"
+    },
+    {
+      "_meta": {
+        "securitySchemes": [
+          {
+            "scopes": [
+              "mcp:full"
+            ],
+            "type": "oauth2"
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false,
+        "readOnlyHint": false,
+        "title": "Request file upload"
+      },
+      "description": "Reserve one subject-bound upload. Then PUT the exact bytes and Content-Type to /uploads/{uploadId}/{filename}. Use files.adopt(uploadId, path) to add the immutable asset to a document.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "properties": {
+          "bytes": {
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "mime": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "filename",
+          "mime",
+          "bytes"
+        ],
+        "type": "object"
+      },
+      "name": "request_upload",
+      "outputSchema": {
+        "anyOf": [
+          {
+            "additionalProperties": false,
+            "properties": {
+              "bytes": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "expiresAtMs": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "filename": {
+                "type": "string"
+              },
+              "maxBytes": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "mime": {
+                "type": "string"
+              },
+              "uploadId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "uploadId",
+              "maxBytes",
+              "filename",
+              "mime",
+              "bytes",
+              "expiresAtMs"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": true,
+            "properties": {
+              "error": {
+                "additionalProperties": false,
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "code",
+                  "message",
+                  "retryable"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "error"
+            ]
+          }
+        ],
+        "type": "object"
+      },
+      "securitySchemes": [
+        {
+          "scopes": [
+            "mcp:full"
+          ],
+          "type": "oauth2"
+        }
+      ],
+      "title": "Request file upload"
+    }
+  ],
+  "transport": {
+    "path": "/mcp",
+    "productionResourceUri": "https://creator-mcp.lottiefiles.com/mcp",
+    "type": "streamable-http"
+  }
+}
