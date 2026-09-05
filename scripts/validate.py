@@ -169,6 +169,9 @@ def main() -> int:
                 validate_https(server.get("url", server.get("httpUrl")), f"{path.relative_to(ROOT)} MCP URL", errors)
         server = payloads.get(ROOT / "server.json")
         if server is not None:
+            server_description = server.get("description")
+            if not isinstance(server_description, str) or len(server_description) > 100:
+                errors.append("server.json description must be at most 100 characters")
             remotes = server.get("remotes")
             if not isinstance(remotes, list) or len(remotes) != 1 or remotes[0].get("type") != "streamable-http":
                 errors.append("server.json must define one streamable-http remote")

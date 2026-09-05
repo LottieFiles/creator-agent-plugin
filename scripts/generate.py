@@ -113,7 +113,7 @@ def generated_json(catalog: dict[str, Any]) -> dict[Path, dict[str, Any]]:
             "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
             "name": "com.lottiefiles/creator",
             "title": catalog["displayName"],
-            "description": catalog["longDescription"],
+            "description": description,
             "version": catalog["version"],
             "remotes": [{"type": "streamable-http", "url": catalog["remote"]["productionUrl"]}]
         },
