@@ -1,0 +1,13 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "description": "Create, manage, and export Lottie animations.",
+  "name": "com.lottiefiles/creator",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://creator-mcp.lottiefiles.com/mcp"
+    }
+  ],
+  "title": "LottieFiles Creator",
+  "version": "0.1.0"
+}

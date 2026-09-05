@@ -1,0 +1,40 @@
+{
+  "id": "lottiefiles-creator",
+  "displayName": "LottieFiles Creator",
+  "marketplaceId": "lottiefiles",
+  "version": "0.1.0",
+  "description": "Create, manage, and export Lottie animations.",
+  "longDescription": "Use the authenticated LottieFiles Creator MCP server for animation creation, export, document management, and LottieFiles API workflows.",
+  "publisher": {
+    "name": "LottieFiles"
+  },
+  "remote": {
+    "productionUrl": "https://creator-mcp.lottiefiles.com/mcp"
+  },
+  "links": {
+    "homepage": "https://github.com/LottieFiles/creator-agent-plugin",
+    "repository": "https://github.com/LottieFiles/creator-agent-plugin",
+    "website": "https://lottiefiles.com",
+    "privacyPolicy": "https://lottiefiles.com/page/privacy-policy",
+    "termsOfService": "https://lottiefiles.com/page/terms-and-conditions"
+  },
+  "mcpServerName": "lottiefiles-creator",
+  "toolNames": [
+    "engine_exec",
+    "engine_docs",
+    "request_upload",
+    "lf_graphql",
+    "engine_document",
+    "engine_export",
+    "engine_job_status",
+    "engine_job_result",
+    "engine_cancel_job"
+  ],
+  "category": "Creativity",
+  "keywords": [
+    "lottiefiles",
+    "lottie",
+    "animation",
+    "creator"
+  ]
+}

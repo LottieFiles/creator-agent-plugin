@@ -1,0 +1,25 @@
+{
+  "description": "Create, manage, and export Lottie animations.",
+  "name": "lottiefiles",
+  "owner": {
+    "name": "LottieFiles"
+  },
+  "plugins": [
+    {
+      "category": "creativity",
+      "description": "Create, manage, and export Lottie animations.",
+      "keywords": [
+        "lottiefiles",
+        "lottie",
+        "animation",
+        "creator"
+      ],
+      "name": "lottiefiles-creator",
+      "source": {
+        "path": "./plugins/lottiefiles-creator",
+        "type": "local"
+      },
+      "version": "0.1.0"
+    }
+  ]
+}

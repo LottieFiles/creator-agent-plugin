@@ -1,0 +1,40 @@
+{
+  "author": {
+    "name": "LottieFiles",
+    "url": "https://lottiefiles.com"
+  },
+  "description": "Create, manage, and export Lottie animations.",
+  "homepage": "https://github.com/LottieFiles/creator-agent-plugin",
+  "interface": {
+    "brandColor": "#00DDB3",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "category": "Creativity",
+    "defaultPrompt": [
+      "Create or edit an authenticated LottieFiles animation.",
+      "Export an animation or inspect an export job.",
+      "Use the LottieFiles API for an animation workflow."
+    ],
+    "developerName": "LottieFiles",
+    "displayName": "LottieFiles Creator",
+    "longDescription": "Use the authenticated LottieFiles Creator MCP server for animation creation, export, document management, and LottieFiles API workflows.",
+    "privacyPolicyURL": "https://lottiefiles.com/page/privacy-policy",
+    "shortDescription": "Create, manage, and export Lottie animations.",
+    "termsOfServiceURL": "https://lottiefiles.com/page/terms-and-conditions",
+    "websiteURL": "https://lottiefiles.com"
+  },
+  "keywords": [
+    "lottiefiles",
+    "lottie",
+    "animation",
+    "creator"
+  ],
+  "license": "MIT",
+  "mcpServers": "./.mcp.json",
+  "name": "lottiefiles-creator",
+  "repository": "https://github.com/LottieFiles/creator-agent-plugin",
+  "skills": "./skills/",
+  "version": "0.1.0"
+}

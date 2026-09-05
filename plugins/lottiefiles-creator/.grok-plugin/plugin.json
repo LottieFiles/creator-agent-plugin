@@ -1,0 +1,9 @@
+{
+  "author": {
+    "name": "LottieFiles"
+  },
+  "description": "Create, manage, and export Lottie animations.",
+  "mcpServers": "./.mcp.json",
+  "name": "lottiefiles-creator",
+  "version": "0.1.0"
+}

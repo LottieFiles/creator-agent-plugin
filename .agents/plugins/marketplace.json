@@ -1,0 +1,20 @@
+{
+  "interface": {
+    "displayName": "LottieFiles"
+  },
+  "name": "lottiefiles",
+  "plugins": [
+    {
+      "category": "Creativity",
+      "name": "lottiefiles-creator",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/lottiefiles-creator",
+        "source": "local"
+      }
+    }
+  ]
+}
