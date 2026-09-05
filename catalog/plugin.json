@@ -1,0 +1,33 @@
+{
+  "id": "lottiefiles-creator",
+  "displayName": "LottieFiles Creator",
+  "marketplaceId": "lottiefiles",
+  "version": "0.1.0",
+  "description": "Authenticated animation creation, export, document management, and LottieFiles API workflows.",
+  "publisher": {
+    "name": "LottieFiles"
+  },
+  "remote": {
+    "productionUrl": "https://creator-mcp.lottiefiles.com/mcp",
+    "stagingUrl": "https://creator-mcp-staging.lottiefiles.com/mcp"
+  },
+  "mcpServerName": "lottiefiles-creator",
+  "toolNames": [
+    "engine_exec",
+    "engine_docs",
+    "request_upload",
+    "lf_graphql",
+    "engine_document",
+    "engine_export",
+    "engine_job_status",
+    "engine_job_result",
+    "engine_cancel_job"
+  ],
+  "category": "Productivity",
+  "keywords": [
+    "lottiefiles",
+    "lottie",
+    "animation",
+    "graphql"
+  ]
+}

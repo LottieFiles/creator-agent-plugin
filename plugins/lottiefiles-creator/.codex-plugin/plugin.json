@@ -1,0 +1,26 @@
+{
+  "author": {
+    "name": "LottieFiles"
+  },
+  "description": "Authenticated animation creation, export, document management, and LottieFiles API workflows.",
+  "interface": {
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "category": "Productivity",
+    "defaultPrompt": [
+      "Create or edit an authenticated LottieFiles animation.",
+      "Export an animation or inspect an export job.",
+      "Use the LottieFiles API for an animation workflow."
+    ],
+    "developerName": "LottieFiles",
+    "displayName": "LottieFiles Creator",
+    "longDescription": "Use the authenticated LottieFiles Creator MCP server for animation creation, export, document management, and LottieFiles API workflows.",
+    "shortDescription": "Authenticated animation creation, export, document management, and LottieFiles API workflows."
+  },
+  "mcpServers": "./.mcp.json",
+  "name": "lottiefiles-creator",
+  "skills": "./skills/",
+  "version": "0.1.0"
+}

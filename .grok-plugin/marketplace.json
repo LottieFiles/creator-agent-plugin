@@ -1,0 +1,25 @@
+{
+  "description": "Authenticated animation creation, export, document management, and LottieFiles API workflows.",
+  "name": "lottiefiles",
+  "owner": {
+    "name": "LottieFiles"
+  },
+  "plugins": [
+    {
+      "category": "productivity",
+      "description": "Authenticated animation creation, export, document management, and LottieFiles API workflows.",
+      "keywords": [
+        "lottiefiles",
+        "lottie",
+        "animation",
+        "graphql"
+      ],
+      "name": "lottiefiles-creator",
+      "source": {
+        "path": "./plugins/lottiefiles-creator",
+        "type": "local"
+      },
+      "version": "0.1.0"
+    }
+  ]
+}
