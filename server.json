@@ -1,6 +1,6 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "description": "Authenticated animation creation, export, document management, and LottieFiles API workflows.",
+  "description": "Use the authenticated LottieFiles Creator MCP server for animation creation, export, document management, and LottieFiles API workflows.",
   "name": "com.lottiefiles/creator",
   "remotes": [
     {

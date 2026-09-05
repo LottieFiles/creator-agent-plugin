@@ -1,5 +1,5 @@
 {
-  "description": "Authenticated animation creation, export, document management, and LottieFiles API workflows.",
+  "description": "Use the authenticated LottieFiles Creator MCP server for animation creation, export, document management, and LottieFiles API workflows.",
   "mcpServers": {
     "lottiefiles-creator": {
       "httpUrl": "https://creator-mcp.lottiefiles.com/mcp"

@@ -140,8 +140,16 @@ def main() -> int:
         if not isinstance(version, str) or not SEMVER.fullmatch(version):
             errors.append("catalog version must be strict semver")
         validate_https(remote, "catalog.remote.productionUrl", errors)
-        if remote == value_at(catalog, "remote", "stagingUrl"):
-            errors.append("staging URL must not be the public default")
+        if set(catalog.get("remote", {})) != {"productionUrl"}:
+            errors.append("catalog remote metadata must publish only productionUrl")
+        links = catalog.get("links")
+        if not isinstance(links, dict):
+            errors.append("catalog links must be an object")
+        else:
+            for key in ("homepage", "repository", "website", "privacyPolicy", "termsOfService"):
+                validate_https(links.get(key), f"catalog.links.{key}", errors)
+        if catalog.get("category") != "Creativity":
+            errors.append("catalog category must be Creativity")
         for path, payload in payloads.items():
             if payload is None:
                 continue

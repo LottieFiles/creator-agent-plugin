@@ -5,7 +5,7 @@
   "name": "lottiefiles",
   "plugins": [
     {
-      "category": "Productivity",
+      "category": "Creativity",
       "name": "lottiefiles-creator",
       "policy": {
         "authentication": "ON_INSTALL",

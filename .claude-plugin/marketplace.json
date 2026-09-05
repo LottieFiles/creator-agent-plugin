@@ -1,19 +1,19 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
-  "description": "Authenticated animation creation, export, document management, and LottieFiles API workflows.",
+  "description": "Create, manage, and export Lottie animations.",
   "name": "lottiefiles",
   "owner": {
     "name": "LottieFiles"
   },
   "plugins": [
     {
-      "category": "productivity",
-      "description": "Authenticated animation creation, export, document management, and LottieFiles API workflows.",
+      "category": "creativity",
+      "description": "Create, manage, and export Lottie animations.",
       "keywords": [
         "lottiefiles",
         "lottie",
         "animation",
-        "graphql"
+        "creator"
       ],
       "name": "lottiefiles-creator",
       "source": "./plugins/lottiefiles-creator",

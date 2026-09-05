@@ -43,23 +43,29 @@ def remote_server(catalog: dict[str, Any], *, gemini: bool = False) -> dict[str,
 
 
 def plugin_manifest(catalog: dict[str, Any]) -> dict[str, Any]:
+    links = catalog["links"]
     return {
         "name": catalog["id"],
         "version": catalog["version"],
         "description": catalog["description"],
-        "author": {"name": catalog["publisher"]["name"]},
+        "author": {"name": catalog["publisher"]["name"], "url": links["website"]},
+        "homepage": links["homepage"],
+        "repository": links["repository"],
+        "license": "MIT",
+        "keywords": catalog["keywords"],
         "skills": "./skills/",
         "mcpServers": "./.mcp.json",
         "interface": {
             "displayName": catalog["displayName"],
             "shortDescription": catalog["description"],
-            "longDescription": (
-                "Use the authenticated LottieFiles Creator MCP server for animation "
-                "creation, export, document management, and LottieFiles API workflows."
-            ),
+            "longDescription": catalog["longDescription"],
             "developerName": catalog["publisher"]["name"],
             "category": catalog["category"],
             "capabilities": ["Read", "Write"],
+            "websiteURL": links["website"],
+            "privacyPolicyURL": links["privacyPolicy"],
+            "termsOfServiceURL": links["termsOfService"],
+            "brandColor": "#00DDB3",
             "defaultPrompt": [
                 "Create or edit an authenticated LottieFiles animation.",
                 "Export an animation or inspect an export job.",
@@ -85,7 +91,7 @@ def marketplace_entry(catalog: dict[str, Any], source: Any) -> dict[str, Any]:
         "description": catalog["description"],
         "version": catalog["version"],
         "source": source,
-        "category": "productivity",
+        "category": "creativity",
         "keywords": catalog["keywords"]
     }
 
@@ -100,14 +106,14 @@ def generated_json(catalog: dict[str, Any]) -> dict[Path, dict[str, Any]]:
         ROOT / "gemini-extension.json": {
             "name": catalog["id"],
             "version": catalog["version"],
-            "description": description,
+            "description": catalog["longDescription"],
             "mcpServers": {server_name: remote_server(catalog, gemini=True)}
         },
         ROOT / "server.json": {
             "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
             "name": "com.lottiefiles/creator",
             "title": catalog["displayName"],
-            "description": description,
+            "description": catalog["longDescription"],
             "version": catalog["version"],
             "remotes": [{"type": "streamable-http", "url": catalog["remote"]["productionUrl"]}]
         },
@@ -189,19 +195,30 @@ def sync_tree(source: Path, destination: Path, *, check: bool) -> bool:
     return changed
 
 
-def sync_content(*, check: bool) -> bool:
-    changed = False
-    for directory in ("skills", "assets"):
-        source = ROOT / "content" / directory
-        destination = PLUGIN_ROOT / directory
-        if source.exists():
-            changed = sync_tree(source, destination, check=check) or changed
+def sync_content(*, check: bool) -> list[Path]:
+    stale: list[Path] = []
+    source_skills = ROOT / "content" / "skills"
+    for destination in (PLUGIN_ROOT / "skills", ROOT / "skills"):
+        if source_skills.exists():
+            if sync_tree(source_skills, destination, check=check):
+                stale.append(destination.relative_to(ROOT))
         elif destination.exists():
             if check:
-                changed = True
+                stale.append(destination.relative_to(ROOT))
             else:
                 shutil.rmtree(destination)
-    return changed
+
+    source_assets = ROOT / "content" / "assets"
+    destination_assets = PLUGIN_ROOT / "assets"
+    if source_assets.exists():
+        if sync_tree(source_assets, destination_assets, check=check):
+            stale.append(destination_assets.relative_to(ROOT))
+    elif destination_assets.exists():
+        if check:
+            stale.append(destination_assets.relative_to(ROOT))
+        else:
+            shutil.rmtree(destination_assets)
+    return stale
 
 
 def main() -> int:
@@ -215,8 +232,7 @@ def main() -> int:
             if not args.check:
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_bytes(expected)
-    if sync_content(check=args.check):
-        stale.append(Path("plugins/lottiefiles-creator/content"))
+    stale.extend(sync_content(check=args.check))
     if args.check and stale:
         print("stale generated outputs:", file=sys.stderr)
         for path in stale:
