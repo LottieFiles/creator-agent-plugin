@@ -6,7 +6,7 @@ Reviewed 2026-09-06. This document records official sources used for packaging d
 
 | Product | Official source | Confirmed capability | Package status |
 | --- | --- | --- | --- |
-| OpenAI | [OpenAI Plugins](https://developers.openai.com/plugins) | Codex and ChatGPT desktop support repository marketplaces. | This repository supports source installation. Universal public directory approval is pending. `.app.json` stays absent until the OpenAI portal issues a real connector app ID. |
+| OpenAI | [OpenAI Plugins](https://developers.openai.com/plugins) | Codex and ChatGPT desktop support repository marketplaces. The Codex source install command is verified; the public packaging page uses the desktop UI install path. | Universal public directory approval is pending. `.app.json` stays absent until the OpenAI portal issues a real connector app ID. |
 | Claude Code | [MCP documentation](https://code.claude.com/docs/en/mcp) | Supports remote HTTP, local stdio, and plugin-provided MCP servers. | Repository marketplace install is supported. Manual MCP connection needs a verified production endpoint. |
 | Grok Build | [Plugins and marketplaces](https://docs.x.ai/build/features/skills-plugins-marketplaces), [CLI reference](https://docs.x.ai/build/cli/reference), and [official marketplace source](https://github.com/xai-org/plugin-marketplace) | Supports plugin marketplaces and MCP configuration. | The Grok adapter uses the current xAI format and official CLI validation. It has no directory listing claim. |
 | ZCode | [Plugin documentation](https://zcode.z.ai/en/docs/plugin) and [MCP documentation](https://zcode.z.ai/en/docs/mcp-services) | Supports plugins and manual MCP servers. The documented manifest lookup falls back to a Claude-compatible manifest. | The package uses that fallback. It intentionally has no duplicate ZCode manifest. |
@@ -29,4 +29,6 @@ These precedents support a mixed-operation GraphQL tool only when the implementa
 
 The brand-assets endpoint could not be reliably retrieved during package preparation. No logo binary is included. A brand owner must verify provenance and approve any asset before publication.
 
-The creator MCP production and staging DNS endpoints did not resolve during package preparation. This is an external publication blocker. Do not claim live endpoint availability until an external test verifies it.
+The tested production endpoint did not resolve during package preparation. This is an external publication blocker. Do not claim live endpoint availability until an external test verifies it.
+
+The public repository distributes production metadata only. Non-production interoperability stays in the private engine workstream.

@@ -6,7 +6,7 @@ This repository supports source installation. It does not prove that a universal
 
 | Client | Native package support | Manual MCP connection | Use after connection |
 | --- | --- | --- | --- |
-| ChatGPT desktop and Codex | Confirmed repository marketplace support. The universal public directory listing is not approved yet. | Wait for the verified production endpoint and OAuth setup. | Install from source, then discover tools before use. |
+| ChatGPT desktop and Codex | Both support repository marketplaces. The Codex source commands below are verified. ChatGPT desktop uses its documented UI install path. The universal public directory listing is not approved yet. | Wait for the verified production endpoint and OAuth setup. | Use the Codex source commands or the ChatGPT desktop UI, then discover tools before use. |
 | Claude Code | Confirmed repository marketplace support. Claude Code also supports plugin-provided and manual MCP servers. | Add the verified endpoint with Claude Code MCP settings only after publication. | Approve the server, authenticate if required, then verify tools. |
 | Grok Build | Adapter support uses the official xAI marketplace format and CLI validation. No directory listing claim. | Use the official Grok marketplace or MCP guidance. Do not use an unpublished endpoint. | Run `grok inspect`, then use the discovered tools. |
 | ZCode | ZCode consumes the Claude-compatible manifest. No duplicate ZCode manifest exists. | Add the repository as a marketplace in ZCode, or add a verified MCP server in Settings -> MCP Servers. | Confirm enabled server and inspect its tools. |
@@ -22,6 +22,8 @@ Codex:
 codex plugin marketplace add LottieFiles/creator-agent-plugin
 codex plugin add lottiefiles-creator@lottiefiles
 ```
+
+The `codex plugin add lottiefiles-creator@lottiefiles` command was verified against the installed Codex CLI command schema on 2026-09-06. The public OpenAI packaging page documents marketplace addition and uses the desktop UI as the install path. Do not treat the Codex command as a ChatGPT desktop source-install command.
 
 Claude Code:
 
@@ -42,7 +44,7 @@ For Grok Build, follow the official plugin marketplace documentation and validat
 
 ## Safe connection procedure
 
-1. Get the endpoint or command from a signed release. Do not use a staging or private address.
+1. Get the endpoint or command from a signed release. Do not use a private address.
 2. Add only the required environment variables or OAuth connection. Keep tokens in the client secret store or environment.
 3. Connect and inspect the tool list. Confirm that only expected tools appear.
 4. Run a read-only example first.
