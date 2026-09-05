@@ -9,6 +9,10 @@ permissions: {}
 env:
   MISE_AUTO_INSTALL: "0"
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 defaults:
   run:
     shell: bash -euo pipefail {0}
@@ -39,7 +43,7 @@ jobs:
       - name: Lint workflows and scripts
         run: |
           mise exec -- actionlint .github/workflows/*.yml
-          mise exec -- zizmor .github
+          mise exec -- zizmor --pedantic .github
           mise exec -- shellcheck scripts/*.sh
       - name: Validate MCP Registry server metadata
         run: bash scripts/check-mcp-registry.sh
