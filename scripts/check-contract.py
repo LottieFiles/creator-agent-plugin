@@ -22,6 +22,8 @@ from check_common import (
 
 CONTRACT = ROOT / "contracts" / "public-mcp-v1.json"
 DIGEST = ROOT / "contracts" / "public-mcp-v1.sha256"
+PLUGIN_CONTRACT = ROOT / "plugins" / "lottiefiles-creator" / "contracts" / "public-mcp-v1.json"
+PLUGIN_DIGEST = ROOT / "plugins" / "lottiefiles-creator" / "contracts" / "public-mcp-v1.sha256"
 TOOL_TOKEN = re.compile(r"\b(?:engine_[a-z0-9_]+|request_upload|lf_graphql)\b")
 DIGEST_LINE = re.compile(
     r"^([a-f0-9]{64})(?:\s+contracts/public-mcp-v1\.json)?\s*$"
@@ -73,6 +75,14 @@ def check_digest() -> None:
         raise CheckError(f"contract digest mismatch: expected {match.group(1)}, got {actual}")
 
 
+def check_plugin_copy() -> None:
+    for path, source in ((PLUGIN_CONTRACT, CONTRACT), (PLUGIN_DIGEST, DIGEST)):
+        if not path.is_file():
+            raise CheckError(f"missing plugin-local contract artifact: {path.relative_to(ROOT)}")
+        if path.read_bytes() != source.read_bytes():
+            raise CheckError(f"plugin-local contract artifact differs from root authority: {path.relative_to(ROOT)}")
+
+
 def check_schema(tool: Any, index: int) -> str:
     label = f"tool[{index}]"
     value = require_object(tool, label)
@@ -116,6 +126,7 @@ def check_references(tool_names: set[str]) -> None:
 
 def main() -> None:
     check_digest()
+    check_plugin_copy()
     assert_public_text(CONTRACT)
     payload = load_json(CONTRACT)
     root = require_object(payload, "contract root")

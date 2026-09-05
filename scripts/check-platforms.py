@@ -99,6 +99,12 @@ def main() -> None:
     )
     if not fallback.is_file():
         raise CheckError("ZCode Claude fallback mcpServers must resolve to a file")
+    for path in (
+        PLUGIN / "contracts/public-mcp-v1.json",
+        PLUGIN / "contracts/public-mcp-v1.sha256",
+    ):
+        if not path.is_file():
+            raise CheckError(f"plugin-local public contract is missing: {path.relative_to(ROOT)}")
 
     # Grok marketplace.
     grok = require_object(load_json(ROOT / ".grok-plugin/marketplace.json"), "Grok marketplace")
