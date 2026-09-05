@@ -37,9 +37,10 @@ jobs:
           version: 2026.9.1
       - name: Install pinned check tools
         run: mise install --yes
-      - uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
       - name: Run deterministic distribution checks
         run: bash scripts/check.sh
+      - name: Scan public files
+        run: mise exec -- gitleaks detect --source . --no-banner --redact
       - name: Lint workflows and scripts
         run: |
           mise exec -- actionlint .github/workflows/*.yml

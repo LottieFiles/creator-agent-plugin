@@ -41,6 +41,8 @@ jobs:
         run: mise install --yes
       - name: Run deterministic distribution checks
         run: bash scripts/check.sh
+      - name: Scan public files
+        run: mise exec -- gitleaks detect --source . --no-banner --redact
       - name: Lint workflows and scripts
         run: |
           mise exec -- actionlint .github/workflows/*.yml
@@ -58,16 +60,3 @@ jobs:
           --exclude '^https://lottiefiles[.]com/page/privacy-policy$'
           --exclude '^https://lottiefiles[.]com/page/terms-and-conditions$'
           README.md content docs examples skills submission
-
-  secrets:
-    name: Scan public files
-    runs-on: ubuntu-24.04
-    timeout-minutes: 5
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-      - uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
