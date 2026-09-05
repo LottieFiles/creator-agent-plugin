@@ -16,4 +16,4 @@ Use synthetic fixtures only. A host reviewer must replace tool arguments with th
 
 ## Annotation rationale: `lf_graphql`
 
-`lf_graphql` is a broad mixed-operation tool because GraphQL capability comes from the current schema and connected account scopes. A fixed list of narrow tools would become incomplete when the public schema evolves. The prompt and skill controls limit the tool: discover schema first, request minimum fields, use variables, paginate, inspect before mutation, and require explicit intent and host confirmation for writes or deletes. The tool does not bypass scopes or authorization.
+`lf_graphql` is a broad mixed-operation tool because GraphQL capability comes from the current schema and connected account scopes. A fixed list of narrow tools would become incomplete when the public schema evolves. The implementation must enforce scopes, bounded requests, server time and size limits, and host confirmation. The skill guides safe use: discover schema first, request minimum fields, use variables, paginate, inspect before mutation, and require explicit intent for writes or deletes. The tool does not bypass scopes or authorization.

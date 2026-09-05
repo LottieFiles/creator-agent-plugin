@@ -20,7 +20,7 @@ The package does not claim a live directory listing or public endpoint. Read [in
 6. Keep tokens and variables out of logs.
 7. Treat GraphQL `data` with `errors` as partial data.
 
-Full LottieFiles GraphQL access is intentional. The connected account scopes still define what the tool can access. The plugin never bypasses scopes.
+Full LottieFiles GraphQL access is intentional. Use bounded requests, minimum fields, variables, pagination, read-before-write checks, and partial-error handling. Account scopes, host confirmation, and server time and size limits control access. Instructions and prompts do not bypass those controls.
 
 ## Contents
 

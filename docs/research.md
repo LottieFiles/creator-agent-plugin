@@ -1,21 +1,23 @@
 # Research and support status
 
-Reviewed 2026-09-05. This document records official sources used for packaging decisions. It does not claim that this package is listed or available in any directory.
+Reviewed 2026-09-06. This document records official sources used for packaging decisions. It does not claim that this package is listed in a universal public directory or that its remote endpoint is live.
 
 ## Client support
 
 | Product | Official source | Confirmed capability | Package status |
 | --- | --- | --- | --- |
-| OpenAI | [OpenAI Apps SDK](https://developers.openai.com/apps-sdk/) | Official OpenAI documentation is the source for ChatGPT app and MCP integration requirements. | Native package support and directory listing require release validation. |
-| Claude Code | [MCP documentation](https://code.claude.com/docs/en/mcp) | Supports remote HTTP and local stdio MCP servers. It also supports plugin-provided servers. | Manual MCP connection is supported by the client; this package needs host validation. |
-| Grok Build | [MCP servers](https://docs.x.ai/build/features/mcp-servers) | Supports configured MCP servers. | Manual MCP connection is supported by the client; this package needs host validation. |
-| ZCode | [Plugin documentation](https://zcode.z.ai/en/docs/plugin) and [MCP documentation](https://zcode.z.ai/en/docs/mcp-services) | Supports plugins and manual MCP servers. | Manual MCP connection is supported by the client; this package needs host validation. |
-| Gemini CLI | [MCP server documentation](https://geminicli.com/docs/tools/mcp-server/) and [source repository](https://github.com/google-gemini/gemini-cli) | Supports MCP server configuration. | Manual MCP connection is supported by the client; this package needs host validation. |
+| OpenAI | [OpenAI Plugins](https://developers.openai.com/plugins) | Codex and ChatGPT desktop support repository marketplaces. | This repository supports source installation. Universal public directory approval is pending. `.app.json` stays absent until the OpenAI portal issues a real connector app ID. |
+| Claude Code | [MCP documentation](https://code.claude.com/docs/en/mcp) | Supports remote HTTP, local stdio, and plugin-provided MCP servers. | Repository marketplace install is supported. Manual MCP connection needs a verified production endpoint. |
+| Grok Build | [Plugins and marketplaces](https://docs.x.ai/build/features/skills-plugins-marketplaces), [CLI reference](https://docs.x.ai/build/cli/reference), and [official marketplace source](https://github.com/xai-org/plugin-marketplace) | Supports plugin marketplaces and MCP configuration. | The Grok adapter uses the current xAI format and official CLI validation. It has no directory listing claim. |
+| ZCode | [Plugin documentation](https://zcode.z.ai/en/docs/plugin) and [MCP documentation](https://zcode.z.ai/en/docs/mcp-services) | Supports plugins and manual MCP servers. The documented manifest lookup falls back to a Claude-compatible manifest. | The package uses that fallback. It intentionally has no duplicate ZCode manifest. |
+| Gemini CLI | [Extension reference](https://geminicli.com/docs/extensions/reference/) and [source repository](https://github.com/google-gemini/gemini-cli) | Supports extension installation from a Git source and MCP configuration. | The root extension manifest and root skills support source installation. Manual MCP connection needs a verified production endpoint. |
 | MCP Registry | [MCP Registry](https://registry.modelcontextprotocol.io/) and [MCP specification](https://modelcontextprotocol.io/specification/) | Provides an official registry and protocol reference. | Registration is not complete until an administrator publishes an entry. |
 
 ## Integration precedents
 
-Cloudflare documents a broad MCP server that exposes platform capabilities. This is the raw or broad API precedent: [Cloudflare MCP server source](https://github.com/cloudflare/mcp-server-cloudflare) and [Cloudflare MCP documentation](https://developers.cloudflare.com/agents/model-context-protocol/). Linear documents an official curated, read-only MCP integration: [Linear MCP documentation](https://linear.app/docs/mcp). These precedents support a broad GraphQL tool only with strict schema discovery, scope, confirmation, and result-handling controls.
+Cloudflare is the broad API precedent. Its official MCP uses compact `search` and `execute` Code Mode tools to expose the full Cloudflare API and can execute GraphQL: [Cloudflare MCP source](https://github.com/cloudflare/mcp). Linear is the curated-object precedent. Its official MCP exposes object tools and a [read-only endpoint](https://linear.app/docs/mcp); Linear’s separate [public API is GraphQL](https://linear.app/developers/graphql). Do not describe Linear MCP as raw GraphQL.
+
+These precedents support a mixed-operation GraphQL tool only when the implementation enforces bounded requests, scopes, server time and size limits, read-before-write checks, confirmation for writes and deletes, pagination, and partial-error handling. Prompt text is guidance; authorization and host controls enforce access.
 
 ## LottieFiles sources
 

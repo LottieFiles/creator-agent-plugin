@@ -1,18 +1,44 @@
 # Install and use
 
-This repository is a source package. It does not prove that a public directory listing or remote MCP endpoint is live. The release manager must publish and validate the package before users can install it from a directory.
+This repository supports source installation. It does not prove that a universal public directory listing or production remote endpoint is approved and live. The release manager must complete publication checks before a directory listing or manual remote connection is announced.
 
 ## Client matrix
 
 | Client | Native package support | Manual MCP connection | Use after connection |
 | --- | --- | --- | --- |
-| ChatGPT and Codex | Not confirmed for this package. Use only a released host install path. | Pending a published public MCP endpoint and host support. | Discover the tools, then follow the included skills. |
-| Claude Code | Not confirmed for this package. Claude Code supports plugin-provided and manually configured MCP servers. | Confirmed client capability; add the released endpoint or command with Claude Code MCP settings. | Approve the server, authenticate if required, then verify tools. |
-| Grok Build | Not confirmed for this package. Grok Build supports plugins and MCP configuration. | Confirmed client capability; add the released endpoint or command with `grok mcp add`. | Run `grok inspect`, then use the discovered tools. |
-| ZCode | Not confirmed for this package. ZCode supports plugins that bundle MCP servers. | Confirmed client capability; add the released endpoint or command in Settings -> MCP Servers. | Confirm enabled server and inspect its tools. |
-| Gemini CLI | Not confirmed for this package. Gemini CLI supports MCP servers. | Confirmed client capability; add the released endpoint or command with `gemini mcp add` or `settings.json`. | Run `/mcp list` and inspect available tools. |
+| ChatGPT desktop and Codex | Confirmed repository marketplace support. The universal public directory listing is not approved yet. | Wait for the verified production endpoint and OAuth setup. | Install from source, then discover tools before use. |
+| Claude Code | Confirmed repository marketplace support. Claude Code also supports plugin-provided and manual MCP servers. | Add the verified endpoint with Claude Code MCP settings only after publication. | Approve the server, authenticate if required, then verify tools. |
+| Grok Build | Adapter support uses the official xAI marketplace format and CLI validation. No directory listing claim. | Use the official Grok marketplace or MCP guidance. Do not use an unpublished endpoint. | Run `grok inspect`, then use the discovered tools. |
+| ZCode | ZCode consumes the Claude-compatible manifest. No duplicate ZCode manifest exists. | Add the repository as a marketplace in ZCode, or add a verified MCP server in Settings -> MCP Servers. | Confirm enabled server and inspect its tools. |
+| Gemini CLI | Confirmed source extension shape: root `gemini-extension.json` and root `skills` are present. | Add a verified MCP server only when the production endpoint and OAuth are approved. | Run `/mcp list` and inspect available tools. |
 | Generic MCP client | No native package claim. | Use the client’s streamable HTTP or stdio configuration after the server is published. | Discover capabilities before a tool call. |
 | MCP Registry | Not listed at publication time. | Registry registration is an administrator action after release validation. | Install only from the registry entry after it exists. |
+
+## Source installation
+
+Codex:
+
+```sh
+codex plugin marketplace add LottieFiles/creator-agent-plugin
+codex plugin add lottiefiles-creator@lottiefiles
+```
+
+Claude Code:
+
+```sh
+claude plugin marketplace add LottieFiles/creator-agent-plugin
+claude plugin install lottiefiles-creator@lottiefiles
+```
+
+Gemini CLI:
+
+```sh
+gemini extensions install https://github.com/LottieFiles/creator-agent-plugin
+```
+
+For Grok Build, follow the official plugin marketplace documentation and validate the adapter with the official CLI. For ZCode, use **Create -> Add marketplace** and select this repository. ZCode documents its fallback to a Claude-compatible plugin manifest, so this package does not include a second ZCode manifest.
+
+`.app.json` is intentionally absent. Do not add it until the OpenAI portal issues a real connector app ID. A placeholder app ID would create an invalid connector claim.
 
 ## Safe connection procedure
 
