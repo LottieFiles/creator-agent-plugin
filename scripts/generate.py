@@ -195,29 +195,25 @@ def sync_tree(source: Path, destination: Path, *, check: bool) -> bool:
     return changed
 
 
-def sync_content(*, check: bool) -> list[Path]:
+def sync_generated_trees(*, check: bool) -> list[Path]:
     stale: list[Path] = []
-    source_skills = ROOT / "content" / "skills"
-    for destination in (PLUGIN_ROOT / "skills", ROOT / "skills"):
-        if source_skills.exists():
-            if sync_tree(source_skills, destination, check=check):
+    mirrors = (
+        (ROOT / "content" / "skills", PLUGIN_ROOT / "skills"),
+        (ROOT / "content" / "skills", ROOT / "skills"),
+        (ROOT / "content" / "references", PLUGIN_ROOT / "references"),
+        (ROOT / "content" / "references", ROOT / "references"),
+        (ROOT / "content" / "assets", PLUGIN_ROOT / "assets"),
+        (ROOT / "contracts", PLUGIN_ROOT / "contracts"),
+    )
+    for source, destination in mirrors:
+        if source.exists():
+            if sync_tree(source, destination, check=check):
                 stale.append(destination.relative_to(ROOT))
         elif destination.exists():
             if check:
                 stale.append(destination.relative_to(ROOT))
             else:
                 shutil.rmtree(destination)
-
-    source_assets = ROOT / "content" / "assets"
-    destination_assets = PLUGIN_ROOT / "assets"
-    if source_assets.exists():
-        if sync_tree(source_assets, destination_assets, check=check):
-            stale.append(destination_assets.relative_to(ROOT))
-    elif destination_assets.exists():
-        if check:
-            stale.append(destination_assets.relative_to(ROOT))
-        else:
-            shutil.rmtree(destination_assets)
     return stale
 
 
@@ -232,7 +228,7 @@ def main() -> int:
             if not args.check:
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_bytes(expected)
-    stale.extend(sync_content(check=args.check))
+    stale.extend(sync_generated_trees(check=args.check))
     if args.check and stale:
         print("stale generated outputs:", file=sys.stderr)
         for path in stale:

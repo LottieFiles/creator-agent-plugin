@@ -5,7 +5,7 @@ description: Search or inspect LottieFiles library or account data with lf_graph
 
 # LottieFiles library and account workflows
 
-Full LottieFiles GraphQL access is intentional. It supports the capabilities that the connected account has. It does not grant extra scopes.
+Full LottieFiles GraphQL access is intentional. It supports the capabilities that the connected account has. It does not grant extra scopes. Read [the contract reference](../../references/tool-contract.md) before a tool call.
 
 1. Discover the needed schema and capability first. Use only fields that the current public schema confirms.
 2. Read before a change. Inspect the target resource and its ownership or current state.

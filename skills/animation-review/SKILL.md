@@ -5,7 +5,7 @@ description: Inspect, review, compare, or diagnose an animation result with inst
 
 # Animation review and diagnosis
 
-Use `engine_docs` to discover the installed Engine contract. Use `engine_document` to inspect, `engine_exec` to render or inspect when the contract requires it, and `engine_job_status` or `engine_job_result` for async work. Read [the contract reference](references/tool-contract.md) before a tool call.
+Use `engine_docs` to discover the installed Engine contract. Use `engine_document` to inspect, `engine_exec` to render or inspect when the contract requires it, and `engine_job_status` or `engine_job_result` for async work. Read [the contract reference](../../references/tool-contract.md) before a tool call.
 
 1. Inspect the source, result, and reported symptom before you diagnose.
 2. Compare the smallest relevant artifact, frame range, or property set.
