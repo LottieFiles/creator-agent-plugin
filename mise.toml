@@ -1,0 +1,5 @@
+[tools]
+"aqua:koalaman/shellcheck" = "0.11.0"
+"aqua:lycheeverse/lychee" = "0.22.0"
+"aqua:rhysd/actionlint" = "1.7.10"
+"aqua:zizmorcore/zizmor" = "1.25.2"

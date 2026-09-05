@@ -1,6 +1,6 @@
 # Examples
 
-These examples use synthetic identifiers and placeholder GraphQL schema names. Replace a placeholder only after the public contract or schema confirms it.
+These examples use synthetic identifiers and placeholder GraphQL schema names. Replace a placeholder only after the public GraphQL schema confirms it.
 
 | Example | Purpose | Writes data |
 | --- | --- | --- |

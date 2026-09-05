@@ -1,0 +1,18 @@
+# Public files included in each deterministic distribution archive.
+README.md
+LICENSE
+CHANGELOG.md
+SECURITY.md
+SUPPORT.md
+catalog
+contract
+content
+docs
+examples
+skills
+plugins
+.agents
+.grok-plugin
+.mcp.json
+gemini-extension.json
+server.json

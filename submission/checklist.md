@@ -4,7 +4,7 @@
 
 - [ ] Run the content generator and confirm generated copies match `content/skills` and `content/assets`.
 - [ ] Validate manifests, metadata, and version against the release tag.
-- [ ] Replace contract reconciliation notes with the released public fixture path and hash.
+- [ ] Verify `contracts/public-mcp-v1.json` against its checked-in SHA-256 and schema `1.0.0`.
 - [ ] Replace schema placeholders only with fields confirmed by a public schema.
 - [ ] Confirm every public URL resolves from an external network.
 - [ ] Verify the package contains no secrets, private paths, user data, debug payloads, or proprietary schema.

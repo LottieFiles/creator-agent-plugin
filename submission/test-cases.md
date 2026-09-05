@@ -1,6 +1,6 @@
 # Test cases
 
-Use synthetic fixtures only. A host reviewer must replace tool arguments with the released public fixture before execution.
+Use synthetic fixtures only. A host reviewer must use the pinned public tool contract and live tool discovery before execution.
 
 | ID | Type | Prompt | Expected tools | Expected behavior | Expected result shape | Fixture |
 | --- | --- | --- | --- | --- | --- | --- |

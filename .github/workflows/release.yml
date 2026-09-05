@@ -1,0 +1,88 @@
+name: Create distribution release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions: {}
+
+env:
+  MISE_AUTO_INSTALL: "0"
+
+defaults:
+  run:
+    shell: bash -euo pipefail {0}
+
+jobs:
+  verify:
+    name: Verify release content
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+        with:
+          python-version: "3.12"
+      - uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4
+        with:
+          cache: false
+          version: 2026.9.1
+      - name: Install pinned check tools
+        run: mise install --yes
+      - uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
+      - name: Run deterministic distribution checks
+        run: bash scripts/check.sh
+      - name: Lint workflows and scripts
+        run: |
+          mise exec -- actionlint .github/workflows/*.yml
+          mise exec -- zizmor .github
+          mise exec -- shellcheck scripts/*.sh
+      - name: Validate MCP Registry server metadata
+        run: bash scripts/check-mcp-registry.sh
+      - name: Check public links without product endpoint probes
+        # These bot-protected LottieFiles pages need human verification.
+        run: >-
+          mise exec -- lychee --no-progress --exclude-all-private --max-concurrency 16
+          --exclude 'https://creator-mcp[.]lottiefiles[.]com/.*'
+          --exclude '^https://lottiefiles[.]com/$'
+          --exclude '^https://lottiefiles[.]com/brand-assets$'
+          --exclude '^https://lottiefiles[.]com/page/privacy-policy$'
+          --exclude '^https://lottiefiles[.]com/page/terms-and-conditions$'
+          README.md content docs examples skills submission
+      - name: Verify release tag versions
+        run: python3 scripts/check-version.py "$GITHUB_REF_NAME"
+      - name: Create deterministic archives
+        run: python3 scripts/package.py --output dist
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: lottiefiles-creator-${{ github.ref_name }}
+          path: dist/
+          if-no-files-found: error
+
+  publish:
+    name: Attach verified distribution archives
+    needs: verify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      attestations: write # Store provenance for the verified local release archives.
+      contents: write # Create the GitHub release and attach verified archives.
+      id-token: write # Sign the archive provenance with this GitHub workflow identity.
+    steps:
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: lottiefiles-creator-${{ github.ref_name }}
+          path: dist
+      - uses: actions/attest-build-provenance@46a583fd92dfbf46b772907a9740f888f4324bb9 # v3.1.0
+        with:
+          subject-path: dist/*
+      - name: Attach verified release archives
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          gh release create "$GITHUB_REF_NAME" dist/*.tar.gz dist/*.zip dist/*.sha256
+          --title "$GITHUB_REF_NAME" --generate-notes

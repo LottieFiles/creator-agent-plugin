@@ -1,0 +1,40 @@
+name: Publication availability probe
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 6 * * *"
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash -euo pipefail {0}
+
+jobs:
+  probe:
+    name: Probe unauthenticated public endpoints
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Check production publication endpoint
+        run: |
+          endpoints=(
+            "https://creator-mcp.lottiefiles.com"
+          )
+          for endpoint in "${endpoints[@]}"; do
+            health_status="$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' \
+              --connect-timeout 10 --max-time 20 --proto '=https' --tlsv1.2 "$endpoint/health" || true)"
+            mcp_status="$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' \
+              --connect-timeout 10 --max-time 20 --proto '=https' --tlsv1.2 \
+              --header 'content-type: application/json' --request POST \
+              --data '{"jsonrpc":"2.0","id":"publication-probe","method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"publication-probe","version":"1"}}}' \
+              "$endpoint/mcp" || true)"
+            echo "$endpoint health=$health_status unauthenticated-mcp=$mcp_status"
+            test "$health_status" = "200"
+            case "$mcp_status" in
+              401|403) ;;
+              *) echo "Expected unauthenticated /mcp status 401 or 403." >&2; exit 1 ;;
+            esac
+          done

@@ -11,13 +11,13 @@ Use semantic versioning.
 1. Generate platform copies from canonical `content/skills` and `content/assets`.
 2. Validate generated output, metadata, links, and public-contract synchronization.
 3. Run the release test suite and the submission test cases in each supported host.
-4. Record the tag, commit, package checksum, public endpoint, and contract fixture hash.
+4. Record the tag, commit, package checksum, public endpoint, OAuth result, and pinned contract hash.
 5. Publish only after the checklist human and administrator gates pass.
 6. Publish the directory entry only after the package is available from its public source.
 
 ## Contract synchronization
 
-Treat the released public tool and GraphQL contracts as versioned inputs. Before each release:
+Treat the pinned public tool contract and public GraphQL schema as versioned inputs. The checked-in tool snapshot is release evidence. At execution, `engine_docs` remains authoritative. Before each release:
 
 1. Compare the contract fixture with skill references and examples.
 2. Replace only verified placeholders.
